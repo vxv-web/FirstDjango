@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 
 # Create your views here.
 
@@ -14,17 +14,11 @@ items = [
 
 
 def home(request):
-    text = '''
-        <header>
-            / <a href='/'>Home</a> / <a href='/items'>Items</a> / <a href='/about'>About</a> /
-        </header>
-        <br>
-        <h1> Home </h1>
-        <h1>"Изучаем django"</h1>
-        <strong>Автор</strong>: <i>Иванов И.П.</i>
-        '''
-
-    return HttpResponse(text)
+    context = {
+        "name": "Петров Иван Николаевич",
+        "email": "my_mail@mail.com"
+    }
+    return render(request, "index.html", context)
 
 
 def about(request):
@@ -53,31 +47,17 @@ def about(request):
 
 
 def get_item(request, item_id):
-    try:
-        id = item_id
-        item = [i for i in items if i['id'] == id][0]
-        result = f"""
-            Название: {item['name']}
-            <br>
-            Количество: {item['quantity']}
-        """
-    except:
-        result = f"""Товар с id = {id} не найден"""
-        
-    return HttpResponse(result)
+    for item in items:
+        if item["id"] == item_id:
+            context = {
+                "item": item
+            }
+            return render(request, "item-page.html", context)
+    return HttpResponseNotFound(f"Товар c id={item_id} не найден")
+
 
 def items_list (request):
-    text = '''
-        <header>
-            / <a href='/'>Home</a> / <a href='/items'>Items</a> / <a href='/about'>About</a> /
-        </header><br>
-        <h1> Items </h1>
-        <ul>
-    '''
-    for i in items:
-        text = text + f"""<li>Название: {i['name']}, количество: {i['quantity']}</li>"""
-    text = text + '''
-        </ul>
-        <a href="/"> Back to Home </a> 
-    '''
-    return HttpResponse(text)
+    context = {
+        "items": items
+    }
+    return render(request, "items-list.html", context)
