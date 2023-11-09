@@ -1,0 +1,17 @@
+.brd{
+    display: inline-block;
+    width: 150px; /* Ширина слоя */
+    margin: 5px; /* Значение отступов */
+    padding: 10px; /* Поля вокруг текста */
+    border: 4px solid black; /* Параметры границы */
+    background: #fc0; /* Цвет фона */
+    word-break: break-all;
+    color: black;
+    text-align: center;
+    box-shadow: 0px 0px 15px #37363689;
+}
+.brd:hover{
+    background-color: green;
+    color: white
+}
+a{text-decoration: none;}

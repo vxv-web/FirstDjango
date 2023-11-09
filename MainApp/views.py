@@ -9,7 +9,8 @@ from django.core.exceptions import ObjectDoesNotExist
 def home(request):
     context = {
         "name": "Петров Иван Николаевич",
-        "email": "my_mail@mail.com"
+        "email": "my_mail@mail.com",
+        "pagename": "home"
     }
     return render(request, "index.html", context)
 
@@ -23,6 +24,7 @@ def about(request):
     "email": "vasya@mail.ru"
     }
     result = f"""
+    <title> About </title>    
     <header>
         / <a href='/'>Home</a> / <a href='/items'>Items</a> / <a href='/about'>About</a> /
     </header><br>
@@ -42,11 +44,14 @@ def about(request):
 def get_item(request, item_id):
     try:
         item = Item.objects.get(id=item_id)
+        colors = item.colors.all()
     except ObjectDoesNotExist:
         return HttpResponseNotFound(f"Товар c id={item_id} не найден")
     else:
         context = {
-            "item": item
+            "item": item,
+            "pagename": "item page",
+            "colors": colors
         }
         return render(request, "item-page.html", context)
 
@@ -54,6 +59,7 @@ def get_item(request, item_id):
 def items_list (request):
     items = Item.objects.all()
     context = {
-        "items": items
+        "items": items,
+        "pagename": "items list"
     }
     return render(request, "items-list.html", context)
